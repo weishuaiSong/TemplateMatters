@@ -1,0 +1,29 @@
+{
+    "MultiChoiceImageQa": [
+        "Please answer in light of what you have observed in the provided image: {question}\nTo find the best answer, you can choose from these options:\n{choices}",
+        "Displayed below is the inquiry regarding the provided image: {question}\nTo find the best answer, you can choose from these options:\n{choices}",
+        "Displayed below is the inquiry regarding the provided image: {question}\nYou should choose the best answer from these choices:\n{choices}",
+        "The inquiry regarding the provided image is: {question}\nAmong these options, you can find the correct answer: {choices}",
+        "Displayed below is the inquiry regarding the provided image: {question}\nThe best answer to the question is included in these choices: {choices}",
+        "The inquiry regarding the provided image is: {question}\nThe best answer to the question is included in these choices: {choices}",
+        "This question asks for your response:\n{question}\nTo find the best answer, you can choose from these options:\n{choices}",
+        "This question asks for your response:\n{question}\nAmong these options, you can find the correct answer: {choices}",
+        "Displayed below is the inquiry regarding the provided image: {question}\nThe correct answer can be selected from these options: {choices}",
+        "This question asks for your response:\n{question}\nYou should choose the best answer from these choices:\n{choices}",
+        "Please answer in light of what you have observed in the provided image: {question}\nThe best answer to the question is included in these choices: {choices}",
+        "The question pertaining to the provided image is presented here for your answer: {question}\nYou should choose the best answer from these choices:\n{choices}",
+        "Displayed below is the inquiry regarding the provided image: {question}\nAmong these options, you can find the correct answer: {choices}",
+        "The question pertaining to the provided image is presented here for your answer: {question}\nAmong these options, you can find the correct answer: {choices}",
+        "The inquiry regarding the provided image is: {question}\nTo find the best answer, you can choose from these options:\n{choices}",
+        "The question pertaining to the provided image is presented here for your answer: {question}\nThe best answer to the question is included in these choices: {choices}",
+        "Please answer in light of what you have observed in the provided image: {question}\nYou should choose the best answer from these choices:\n{choices}",
+        "This question asks for your response:\n{question}\nThe correct answer can be selected from these options: {choices}",
+        "The inquiry regarding the provided image is: {question}\nThe correct answer can be selected from these options: {choices}",
+        "Please answer in light of what you have observed in the provided image: {question}\nAmong these options, you can find the correct answer: {choices}",
+        "The question pertaining to the provided image is presented here for your answer: {question}\nTo find the best answer, you can choose from these options:\n{choices}",
+        "The inquiry regarding the provided image is: {question}\nYou should choose the best answer from these choices:\n{choices}",
+        "The question pertaining to the provided image is presented here for your answer: {question}\nThe correct answer can be selected from these options: {choices}",
+        "Please answer in light of what you have observed in the provided image: {question}\nThe correct answer can be selected from these options: {choices}",
+        "This question asks for your response:\n{question}\nThe best answer to the question is included in these choices: {choices}"
+    ]
+}

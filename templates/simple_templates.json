@@ -1,0 +1,7 @@
+{
+    "MultiChoiceImageQa": [
+        "{question}\n{choices}", 
+        "Question: {question}\nChoices: {choices}", 
+        "Question: {question}\nSelect from the following choices: {choices}"
+    ]
+}
