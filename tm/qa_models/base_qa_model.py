@@ -103,9 +103,10 @@ class QAModel():
             free_form_answer, choices, prefix1, prefix2, options)
 
         result = {
+            "prompt": prompt,
+            "choices": choices.copy(),
             "free_form_answer": free_form_answer,
             "multiple_choice_answer": multiple_choice_answer,
-            "choices": choices.copy(),
         }
 
         if answer is not None:
