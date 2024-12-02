@@ -1,18 +1,21 @@
-from .base_vqa_datasets import SingleVQADatsetInstance, BaseSingleVQADataset
-from datasets import load_dataset, load_from_disk, concatenate_datasets
+from datasets import load_dataset, concatenate_datasets
 import ast
 
+from .base_vqa_datasets import SingleVQADatasetInstance, BaseSingleVQADataset
+
 single_image_qa_datasets = {
-    "blink-subset": ("BLINK", "./subset/blink", "local"),
-    "mmbench-subset": ("MMBench", "./subset/mmbench", "local"),
-    "seedbench1-subset": ("SeedBench1", "./subset/seedbench1", "local"),
-    "blink-dev-all-single-images": ("BLINK", "BLINK-Benchmark/BLINK", "hf-all"),
-    "seedbench1-all-single-images": ("SeedBench1", "lmms-lab/SEED-Bench", "hf-all"),
-    "mmbench-en-dev-all": ("MMBench", "lmms-lab/MMBench", "hf-all"),
-    "tma-subset": ("TaskMeAnything", "./subset/tma", "local"),
-    "tma-all": ("TaskMeAnything", "weikaih/TaskMeAnything-v1-imageqa-random", "hf-all"),
-    "mmmu-subset": ("MMMU", "./subset/mmmu_dev", "local"),
-    "mmmu-dev-val-all": ("MMMU", "lmms-lab/MMMU", "hf-all")
+
+    "blink-subset": ("BLINK", "shijianS01/blink-subset"),
+    "mmbench-subset": ("MMBench", "shijianS01/mmbench-subset"),
+    "seedbench1-subset": ("SeedBench1", "shijianS01/seedbench-subset"),
+    "tma-subset": ("TaskMeAnything", "shijianS01/tma-subset"),
+    "mmmu-subset": ("MMMU", "shijianS01/mmmu-subset"),
+
+    "blink-dev-all-single-images": ("BLINK", "BLINK-Benchmark/BLINK"),
+    "seedbench1-all-single-images": ("SeedBench1", "lmms-lab/SEED-Bench"),
+    "mmbench-en-dev-all-single-images": ("MMBench", "lmms-lab/MMBench"),
+    "tma-all": ("TaskMeAnything", "weikaih/TaskMeAnything-v1-imageqa-random"),
+    "mmmu-dev-val-all-single-images": ("MMMU", "lmms-lab/MMMU")
 }
 
 
@@ -20,23 +23,23 @@ class SingleImageQADataset(BaseSingleVQADataset):
     def __init__(
         self,
         dataset_name: str,
-        dataset: SingleVQADatsetInstance = None
+        dataset: SingleVQADatasetInstance = None
     ):
         super().__init__(dataset_name)
 
         if dataset is None:
             print(f"Loading {dataset_name}...")
-            class_name, dataset_path, dataset_type = single_image_qa_datasets[dataset_name]
-            self.dataset = eval(class_name)(dataset_path, dataset_type)
+            class_name, dataset_path = single_image_qa_datasets[dataset_name]
+            self.dataset = eval(class_name)(dataset_path)
             print(f"Finish loading {dataset_name}")
 
 
-class BLINK(SingleVQADatsetInstance):
+class BLINK(SingleVQADatasetInstance):
 
-    def __init__(self, dataset_path, dataset_type):
-        if dataset_type == "local":
-            self.dataset = load_from_disk(dataset_path)
-        elif dataset_type == "hf-all":
+    def __init__(self, dataset_path):
+        if dataset_path == "shijianS01/blink-subset":
+            self.dataset = load_dataset(dataset_path)["eval"]
+        else:
             datasets = []
             for single_image_task in ['Counting', 'IQ_Test', 'Object_Localization', 'Relative_Depth', 'Relative_Reflectance', 'Spatial_Relation']:
                 subset = load_dataset(
@@ -44,8 +47,6 @@ class BLINK(SingleVQADatsetInstance):
                 datasets.append(subset)
             combined_dataset = concatenate_datasets(datasets)
             self.dataset = combined_dataset
-        else:
-            return ValueError("Havn't support the dataset type")
 
     def get_standard_dataset(self):
 
@@ -68,15 +69,13 @@ class BLINK(SingleVQADatsetInstance):
         return standard_dataset
 
 
-class MMBench(SingleVQADatsetInstance):
+class MMBench(SingleVQADatasetInstance):
 
-    def __init__(self, dataset_path, dataset_type):
-        if dataset_type == "local":
-            self.dataset = load_from_disk(dataset_path)
-        elif dataset_type == "hf-all":
-            self.dataset = load_dataset(dataset_path, "en")["dev"]
+    def __init__(self, dataset_path):
+        if dataset_path == "shijianS01/mmbench-subset":
+            self.dataset = load_dataset(dataset_path)["eval"]
         else:
-            return ValueError("Havn't support the dataset type")
+            self.dataset = load_dataset(dataset_path, "en")["dev"]
 
     def get_standard_dataset(self):
 
@@ -100,16 +99,14 @@ class MMBench(SingleVQADatsetInstance):
         return standard_dataset
 
 
-class SeedBench1(SingleVQADatsetInstance):
+class SeedBench1(SingleVQADatasetInstance):
 
-    def __init__(self, dataset_path, dataset_type):
-        if dataset_type == "local":
-            self.dataset = load_from_disk(dataset_path)
-        elif dataset_type == "hf-all":
+    def __init__(self, dataset_path):
+        if dataset_path == "shijianS01/seedbench-subset":
+            self.dataset = load_dataset(dataset_path)["eval"]
+        else:
             self.dataset = load_dataset(dataset_path)[
                 "test"].select(range(14233))
-        else:
-            return ValueError("Havn't support the dataset type")
 
     def get_standard_dataset(self):
 
@@ -138,18 +135,16 @@ class SeedBench1(SingleVQADatsetInstance):
         return standard_dataset
 
 
-class TaskMeAnything(SingleVQADatsetInstance):
+class TaskMeAnything(SingleVQADatasetInstance):
 
-    def __init__(self, dataset_path, dataset_type):
-        if dataset_type == "local":
-            self.dataset = load_from_disk(dataset_path)
-        elif dataset_type == "hf-all":
+    def __init__(self, dataset_path):
+        if dataset_path == "shijianS01/tma-subset":
+            self.dataset = load_dataset(dataset_path)["eval"]
+        else:
             tma = load_dataset(dataset_path)
             combined_dataset = concatenate_datasets(
                 [tma[split] for split in tma.keys()])
             self.dataset = combined_dataset
-        else:
-            return ValueError("Havn't support the dataset type")
 
     def get_standard_dataset(self):
 
@@ -158,12 +153,12 @@ class TaskMeAnything(SingleVQADatsetInstance):
         return standard_dataset
 
 
-class MMMU(SingleVQADatsetInstance):
+class MMMU(SingleVQADatasetInstance):
 
-    def __init__(self, dataset_path, dataset_type):
-        if dataset_type == "local":
-            self.dataset = load_from_disk(dataset_path)
-        elif dataset_type == "hf-all":
+    def __init__(self, dataset_path):
+        if dataset_path == "shijianS01/mmmu-subset":
+            self.dataset = load_dataset(dataset_path)["eval"]
+        else:
             mmmu = load_dataset(dataset_path)
             dev = mmmu["dev"].filter(
                 lambda x: x["image_2"] is None and x["question_type"] == "multiple-choice")
@@ -171,8 +166,6 @@ class MMMU(SingleVQADatsetInstance):
                 lambda x: x["image_2"] is None and x["question_type"] == "multiple-choice")
             combined_dataset = concatenate_datasets([dev, val])
             self.dataset = combined_dataset
-        else:
-            return ValueError("Havn't support the dataset type")
 
     def get_standard_dataset(self):
 

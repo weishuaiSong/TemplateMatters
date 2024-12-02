@@ -1,7 +1,5 @@
-from typing import *
 
-
-class SingleVQADatsetInstance:
+class SingleVQADatasetInstance:
 
     def get_standard_dataset(self):
         "(Abstract method) abstract VQA dataset method"
