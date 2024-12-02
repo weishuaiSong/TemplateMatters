@@ -64,9 +64,9 @@ class QAModel():
                 return response
 
     @torch.no_grad()
-    def qa(self, data, question):
+    def qa(self, image, question):
         prompt = question  # direct qa
-        return self._qa(data, prompt)
+        return self._qa(image, prompt)
 
     def _limit_answer(self, free_form_answer, choices, prefix1, prefix2, options):
         # Limit the answer to the choices
@@ -91,11 +91,11 @@ class QAModel():
         return multiple_choice_answer
 
     @torch.no_grad()
-    def multiple_choice_qa(self, data, question, choices, prompt_func=None, answer=None):
+    def multiple_choice_qa(self, image, question, choices, prompt_func=None, answer=None):
         # Get VQA model's answer
         prefix1, prefix2, options = make_options(choices, self.format)
         prompt = prompt_func(question, options) if prompt_func else self.default_prompt_func(question, options)
-        free_form_answer = self._qa(data, prompt)
+        free_form_answer = self._qa(image, prompt)
         free_form_answer = free_form_answer.strip()
 
         # Limit the answer to the choices
@@ -109,18 +109,19 @@ class QAModel():
         }
 
         if answer is not None:
+            result["answer"] = answer
             result["accuracy"] = int(answer == multiple_choice_answer)
         return result
 
     @torch.no_grad()
-    def multiple_choice_qa_random_ordering(self, data, question, choices, prompt_func=None, answer=None, n_trials=3):
+    def multiple_choice_qa_random_ordering(self, image, question, choices, prompt_func=None, answer=None, n_trials=3):
         results = {}
         accuracy = 0
         for i in range(n_trials):
             choices_i = choices.copy()
             random.shuffle(choices_i)
             results[i] = self.multiple_choice_qa(
-                data, question, choices_i, prompt_func, answer)
+                image, question, choices_i, prompt_func, answer)
             accuracy += results[i]["accuracy"]
         results["accuracy"] = accuracy / n_trials
         return results
