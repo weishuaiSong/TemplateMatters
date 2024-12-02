@@ -1,9 +1,20 @@
 import torchvision.transforms as T
 from torchvision.transforms.functional import InterpolationMode
+from typing import List
 import base64
 import io
 import torch
 from PIL import Image
+
+
+def build_prompt_func(prompt_template: str):
+    def imageqa_prompt(question: str, choices: List[str]):
+        prompt = prompt_template.format(
+            question=question,
+            choices=" ".join(choices)
+        )
+        return prompt
+    return imageqa_prompt
 
 
 def make_options(choices, format='letter'):

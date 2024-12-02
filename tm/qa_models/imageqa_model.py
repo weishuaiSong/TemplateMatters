@@ -1,22 +1,11 @@
-import torchvision.transforms as T
-from torchvision.transforms.functional import InterpolationMode
-import base64
-import json
 import tempfile
-import time
-from typing import Callable, Union
-import diskcache
-import openai
+from typing import Union
 import torch
 from PIL import Image
-from torch.nn.parallel import DataParallel
+from transformers import image_utils
 
 from .base_qa_model import QAModelInstance, QAModel
 from .utils import image_to_base64, load_image
-
-
-# TODO: load_image; LLaVA; model_precision; torch_device
-
 
 imageqa_models = {
 
@@ -56,7 +45,6 @@ class ImageQAModel(QAModel):
     def __init__(
         self,
         model_name: str,
-        prompt_func: Callable,
         model: QAModelInstance = None,
         torch_device: Union[int, str] = -1,
         precision=torch.bfloat16,
@@ -65,8 +53,7 @@ class ImageQAModel(QAModel):
         cache_path: str = None,
 
     ):
-        super().__init__(model_name, prompt_func,
-                         choice_format, enable_choice_search, cache_path)
+        super().__init__(model_name, choice_format, enable_choice_search, cache_path)
 
         if isinstance(torch_device, str):
             if torch_device != "auto":
@@ -107,12 +94,12 @@ class LLaVA(QAModelInstance):
                 ckpt,
                 torch_dtype=model_precision,
                 low_cpu_mem_usage=True,
-                device_map="auto"
+                device_map=torch_device
             ).eval()
             self.processor = LlavaNextProcessor.from_pretrained(
-                ckpt, device_map="auto")
+                ckpt, device_map=torch_device)
         elif ckpt in {
-                "shijianS01/llava-v1.5-7b-lora",
+                "llava-hf/llava-1.5-7b-hf",
                 "shijianS01/llava-v1.5-7b-lora-100-templated",
                 "shijianS01/llava-v1.5-7b-lora-1k-templated",
                 "shijianS01/llava-v1.5-7b-lora-5k-templated",
@@ -124,11 +111,12 @@ class LLaVA(QAModelInstance):
                 ckpt,
                 torch_dtype=model_precision,
                 low_cpu_mem_usage=True,
-                device_map="auto",
+                device_map=torch_device,
             ).eval()
             self.processor = AutoProcessor.from_pretrained(
-                "llava-hf/llava-1.5-7b-hf", device_map="auto")
+                "llava-hf/llava-1.5-7b-hf", device_map=torch_device)
         elif ckpt in {
+                "llava-hf/llava-1.5-7b-hf",
                 "shijianS01/llava-v1.5-13b-lora-100-templated",
                 "shijianS01/llava-v1.5-13b-lora-1k-templated",
                 "shijianS01/llava-v1.5-13b-lora-5k-templated",
@@ -140,20 +128,12 @@ class LLaVA(QAModelInstance):
                 ckpt,
                 torch_dtype=model_precision,
                 low_cpu_mem_usage=True,
-                device_map="auto",
+                device_map=torch_device,
             ).eval()
             self.processor = AutoProcessor.from_pretrained(
-                "llava-hf/llava-1.5-13b-hf", device_map="auto")
+                "llava-hf/llava-1.5-13b-hf", device_map=torch_device)
         else:
-            from transformers import AutoProcessor, LlavaForConditionalGeneration
-            self.model = LlavaForConditionalGeneration.from_pretrained(
-                ckpt,
-                torch_dtype=model_precision,
-                low_cpu_mem_usage=True,
-                device_map="auto"
-            ).eval()
-            self.processor = AutoProcessor.from_pretrained(
-                ckpt, device_map="auto")
+            raise ValueError("Not Implemented")
 
     def qa(self, image, prompt):
         if isinstance(image, str):
@@ -325,7 +305,7 @@ class InternVLChat(QAModelInstance):
 
 
 class IDEFICS2(QAModelInstance):
-    def __init__(self, ckpt="HuggingFaceM4/idefics2-8b", torch_device=torch.device("cuda"), model_precision=torch.float16):
+    def __init__(self, ckpt="HuggingFaceM4/idefics2-8b", torch_device=torch.device("cuda"), model_precision=torch.float32):
         from transformers import AutoProcessor, AutoModelForVision2Seq
 
         self.processor = AutoProcessor.from_pretrained(ckpt)
@@ -335,7 +315,6 @@ class IDEFICS2(QAModelInstance):
             _attn_implementation="flash_attention_2",
             device_map=torch_device
         )
-        # .to(torch_device)
 
     def _extract_assistant_content(self, text: str):
         parts = text.split('\nAssistant:', 1)
@@ -344,8 +323,6 @@ class IDEFICS2(QAModelInstance):
         return text
 
     def qa(self, image, prompt):
-
-        from transformers.image_utils import load_image
 
         messages = [
             {
@@ -365,7 +342,7 @@ class IDEFICS2(QAModelInstance):
                                     image], return_tensors="pt")
         else:
             inputs = self.processor(text=input_prompt, images=[
-                                    load_image(image)], return_tensors="pt")
+                                    image_utils.load_image(image)], return_tensors="pt")
 
         inputs = {k: v.to(self.model.device) for k, v in inputs.items()}
 
