@@ -1,10 +1,10 @@
 from functools import reduce
-from typing import *
+from typing import List, Optional, Union
 import random
 import re
 
 
-class MetaElement:
+class PositionalSynonyms:
     def __init__(self, name: str, candidates: List[str], comment: str = "none"):
         self.name = name
         self.candidates = candidates
@@ -23,32 +23,32 @@ class MetaElement:
         return len(self.candidates)
 
 
-class Pattern:
+class MetaTemplate:
     """
-    - Example pattern: {verb} the{is_following}image, answer the question: {{question}}.
+    - Example meta_template: {verb} the{is_following}image, answer the question: {{question}}.
     - Only extract {}, instead of {{}}
     - Designed for template of template
     """
 
-    def __init__(self, pattern: str, meta_elements: Optional[List[MetaElement]] = None):
-        self.pattern = pattern
-        self.meta_elements = meta_elements or []
-        self._check_pattern()
+    def __init__(self, meta_template: str, positional_synonyms: Optional[List[PositionalSynonyms]] = None):
+        self.meta_template = meta_template
+        self.positional_synonyms = positional_synonyms or []
+        self._check_meta_template()
 
     def _is_duplicate(self, placeholders: List[str]) -> bool:
         return len(placeholders) != len(set(placeholders))
 
-    def _check_pattern(self):
+    def _check_meta_template(self):
         self.placeholders = re.findall(
-            r'(?<!\{)\{([^{}]*)\}(?!\})', self.pattern)
+            r'(?<!\{)\{([^{}]*)\}(?!\})', self.meta_template)
         if self._is_duplicate(self.placeholders):
             raise ValueError("Duplicate placeholders are not allowed")
-        if self.meta_elements:
-            meta_element_names = [
-                element.name for element in self.meta_elements]
-            if (set(self.placeholders) != set(meta_element_names)) or (len(self.placeholders) != len(meta_element_names)):
+        if self.positional_synonyms:
+            positional_synonyms_names = [
+                element.name for element in self.positional_synonyms]
+            if (set(self.placeholders) != set(positional_synonyms_names)) or (len(self.placeholders) != len(positional_synonyms_names)):
                 raise ValueError(
-                    "Pattern placeholders do not match meta_elements names")
+                    "MetaTemplate placeholders do not match positional_synonyms names")
 
     @property
     def num_placeholders(self):
@@ -56,37 +56,37 @@ class Pattern:
 
     @property
     def num_potential_prompts(self):
-        return reduce(lambda x, y: x * y.num_candidates, self.meta_elements or [], 1)
+        return reduce(lambda x, y: x * y.num_candidates, self.positional_synonyms or [], 1)
 
-    def fit_pattern(self):
-        if not self.meta_elements:
-            return self.pattern.format()
+    def fit_meta_template(self):
+        if not self.positional_synonyms:
+            return self.meta_template.format()
         element_dict = {
-            element.name: element.random_candidate for element in self.meta_elements}
+            element.name: element.random_candidate for element in self.positional_synonyms}
         # Ensured that the first letter of the sentence is capitalized
         # Ensured that the generated senetence is striped
-        fited = self.pattern.format(**element_dict).strip()
+        fited = self.meta_template.format(**element_dict).strip()
         return fited[0].upper() + fited[1:]
 
 
 class Node:
-    def __init__(self, name: str, pattern: Optional['Pattern'] = None):
+    def __init__(self, name: str, meta_template: Optional['MetaTemplate'] = None):
         self.name = name
         self.children: List[Node] = []
-        self.pattern = pattern  # Only leaf nodes have pattern
+        self.meta_template = meta_template  # Only leaf nodes have meta_template
         self.weight = 1
 
     def add_child(self, child: 'Node'):
         self.children.append(child)
 
     def is_leaf(self) -> bool:
-        return self.pattern is not None
+        return self.meta_template is not None
 
     def balance_weights(self) -> float:
         if self.is_leaf():
-            # Weights are based on the number of placeholders of the pattern
+            # Weights are based on the number of placeholders of the meta_template
             # Add-one smoothing
-            self.weight = self.pattern.num_placeholders + 1
+            self.weight = self.meta_template.num_placeholders + 1
         else:
             self.weight = sum(child.balance_weights()
                               for child in self.children)
@@ -101,9 +101,9 @@ class Node:
 
 
 class TemplateGenerator:
-    def __init__(self, data: Union[dict, list], name: str = '', enable_balanced_pattern: bool = True):
+    def __init__(self, data: Union[dict, list], name: str = '', enable_balanced: bool = True):
         self.root = self._build_taxonomy(data, name)
-        if enable_balanced_pattern:
+        if enable_balanced:
             self.root.balance_weights()
 
     @property
@@ -112,7 +112,7 @@ class TemplateGenerator:
 
     def _get_total_prompts(self, node: Node) -> int:
         if node.is_leaf():
-            return node.pattern.num_potential_prompts
+            return node.meta_template.num_potential_prompts
         else:
             return sum(self._get_total_prompts(child) for child in node.children)
 
@@ -125,10 +125,11 @@ class TemplateGenerator:
             return node
         elif isinstance(data, list):
             parent_node = Node(name=name)
-            for i, pattern in enumerate(data):
-                pattern_str = f"pattern_{i+1}"
-                pattern_node = Node(name=pattern_str, pattern=pattern)
-                parent_node.add_child(pattern_node)
+            for i, meta_template in enumerate(data):
+                meta_template_str = f"meta_template_{i+1}"
+                meta_template_node = Node(
+                    name=meta_template_str, meta_template=meta_template)
+                parent_node.add_child(meta_template_node)
             return parent_node
         else:
             raise ValueError(f"Unsupported data type: {type(data)}")
@@ -157,10 +158,11 @@ class TemplateGenerator:
             if not start_node:
                 raise ValueError(f"Node with path '{path}' not found.")
         leaf = start_node.traverse()
-        if leaf.pattern:
-            return leaf.pattern.fit_pattern()
+        if leaf.meta_template:
+            return leaf.meta_template.fit_meta_template()
         else:
-            raise ValueError("Traversal did not result in a valid pattern.")
+            raise ValueError(
+                "Traversal did not result in a valid meta_template.")
 
     def visualize_taxonomy(self, node: Optional[Node] = None, level: int = 0):
         if node is None:
@@ -168,7 +170,7 @@ class TemplateGenerator:
         indent = " " * (level * 4)
         if node.is_leaf():
             print(
-                f"{indent}- {node.name} (weight: {node.weight}): {node.pattern.pattern}")
+                f"{indent}- {node.name} (weight: {node.weight}): {node.meta_template.meta_template}")
         else:
             print(f"{indent}+ {node.name} (weight: {node.weight})")
             for child in node.children:

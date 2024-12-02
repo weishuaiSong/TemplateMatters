@@ -1,16 +1,29 @@
 #### Util Functions for Template Generator ####
 
-from .base import TemplateGenerator
-from .vqa_meta_data import QUESTION_PATTERNS, CHOICES_PATTERNS
 from typing import *
-from tqdm import tqdm
 import random
+from tqdm import tqdm
+from .base import TemplateGenerator
+from .vqa_meta_data import QuestionMetaTemplates, ChoiceMetaTemplates
 
 
 class QuestionTemplateGenerator:
-    def __init__(self, enable_balanced_pattern: bool = True):
+    def __init__(self, enable_balanced: bool = True):
         self.generator = TemplateGenerator(
-            QUESTION_PATTERNS, enable_balanced_pattern=enable_balanced_pattern)
+            QuestionMetaTemplates, enable_balanced=enable_balanced)
+
+    def generate(self):
+        return self.generator.generate()
+
+    @property
+    def num_all_potential_prompts(self):
+        return self.generator.num_all_potential_prompts
+
+
+class ChoiceTemplateGenerator:
+    def __init__(self, enable_balanced: bool = True):
+        self.generator = TemplateGenerator(
+            ChoiceMetaTemplates, enable_balanced=enable_balanced)
 
     def generate(self):
         return self.generator.generate()
@@ -21,15 +34,15 @@ class QuestionTemplateGenerator:
 
 
 class VQATemplateGenerator:
-    def __init__(self, enable_shuffle: bool = False, enable_balanced_pattern: bool = True):
+    def __init__(self, enable_shuffle: bool = False, enable_balanced: bool = True):
         self.enable_shuffle = enable_shuffle
-        self.question_generator = QuestionTemplateGenerator(
-            enable_balanced_pattern)
-        self.choices_template_generator = TemplateGenerator(
-            CHOICES_PATTERNS, enable_balanced_pattern=enable_balanced_pattern)
+        self.question_template_generator = QuestionTemplateGenerator(
+            enable_balanced)
+        self.choices_template_generator = ChoiceTemplateGenerator(
+            enable_balanced)
 
     def generate(self):
-        question_template = self.question_generator.generate()
+        question_template = self.question_template_generator.generate()
         choices_template = self.choices_template_generator.generate()
 
         templates = [question_template, choices_template]
@@ -41,7 +54,7 @@ class VQATemplateGenerator:
 
     @property
     def num_all_potential_prompts(self):
-        total = self.question_generator.num_all_potential_prompts * \
+        total = self.question_template_generator.num_all_potential_prompts * \
             self.choices_template_generator.num_all_potential_prompts
         return total
 

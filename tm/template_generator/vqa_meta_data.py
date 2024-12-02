@@ -1,32 +1,32 @@
-from .base import MetaElement, Pattern
+from .base import PositionalSynonyms, MetaTemplate
 
-### Please set the "name" of MetaElement the same as the placeholder in the pattern
+### Please set the "name" of PositionalSynonyms the same as the placeholder in the MetaTemplate
 ### Have ensured that the first letter of the sentence is capitalized
 ### Have ensured the generated senetence is striped
 
-# Global meta elements
-is_line_breaking = MetaElement("is_line_breaking", ["\n", " "])
-is_please = MetaElement("is_please", [" please ", " "])
-is_following = MetaElement("is_following", [" following ", " "])
+# Global PositionalSynonyms
+is_line_breaking = PositionalSynonyms("is_line_breaking", ["\n", " "])
+is_please = PositionalSynonyms("is_please", [" please ", " "])
+is_following = PositionalSynonyms("is_following", [" following ", " "])
 
-# Question Patterns
-QUESTION_PATTERNS = {
+# Question MetaTemplates
+QuestionMetaTemplates = {
     "Empty":[
-        Pattern(
+        MetaTemplate(
             "{{question}}"
         ),
     ],
     "Declarative":{
         "Simple":{
             "Subject-Verb-Object":[
-                Pattern(
+                MetaTemplate(
                     "The{is_following}question {related_to} the{is_provided}{image} {verb} {object}:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
-                        MetaElement("verb", ["asks for", "requires"]),
-                        MetaElement("object", ["your response", "an answer", "an response", "your answer"]),
+                        PositionalSynonyms("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
+                        PositionalSynonyms("verb", ["asks for", "requires"]),
+                        PositionalSynonyms("object", ["your response", "an answer", "an response", "your answer"]),
                         is_following,
                         is_line_breaking
                     ]
@@ -35,37 +35,37 @@ QUESTION_PATTERNS = {
             ],
             "Subject-LinkingVerb-Complement":[
                 # Omit the linking-verb: Question (is)
-                Pattern(
+                MetaTemplate(
                     "Question:{is_line_breaking}{{question}}",
                     [
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{is_the}question {related_to} the{is_provided}{image}{is}{is_line_breaking}{{question}}",
                     [
-                        MetaElement("is_the", [" ", " the "]),
-                        MetaElement("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
-                        MetaElement("is", [":", " is:", " is as follows:"]),
+                        PositionalSynonyms("is_the", [" ", " the "]),
+                        PositionalSynonyms("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
+                        PositionalSynonyms("is", [":", " is:", " is as follows:"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{intro} is the question:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("intro", ["The following", "Here", "Below", "Presented below", "Presented here"]),
+                        PositionalSynonyms("intro", ["The following", "Here", "Below", "Presented below", "Presented here"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{intro} is the question {related_to} the{is_provided}{image}:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("intro", ["The following", "Here", "Below", "Presented below", "Presented here"]),
-                        MetaElement("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
+                        PositionalSynonyms("intro", ["The following", "Here", "Below", "Presented below", "Presented here"]),
+                        PositionalSynonyms("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
                         is_line_breaking
                     ]
                 ),
@@ -73,49 +73,49 @@ QUESTION_PATTERNS = {
         },
         "Compound":{
             "Joined-By-Coordinating-Conjunctions":[
-                Pattern(
+                MetaTemplate(
                     "The question is {given} {below} {conjunction} you should {answer} it:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("given", ["provided", "given", "presented"]),
-                        MetaElement("below", ["below", "here"]),
-                        MetaElement("conjunction", ["and", "then"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("given", ["provided", "given", "presented"]),
+                        PositionalSynonyms("below", ["below", "here"]),
+                        PositionalSynonyms("conjunction", ["and", "then"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "The question {related_to} the{is_provided}{image} is {given} {below} {conjunction} you should {answer} it:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
-                        MetaElement("given", ["provided", "given", "presented"]),
-                        MetaElement("below", ["below", "here"]),
-                        MetaElement("conjunction", ["and", "then"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
+                        PositionalSynonyms("given", ["provided", "given", "presented"]),
+                        PositionalSynonyms("below", ["below", "here"]),
+                        PositionalSynonyms("conjunction", ["and", "then"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_line_breaking
                     ]
                 ),
             ],
             "Joined-By-Semicolons":[
-                Pattern(
+                MetaTemplate(
                     "The question is {given} {below}; you should {answer} it:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("given", ["provided", "given", "presented"]),
-                        MetaElement("below", ["below", "here"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("given", ["provided", "given", "presented"]),
+                        PositionalSynonyms("below", ["below", "here"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "The question {related_to} the{is_provided}{image} is {given} {below}; you should {answer} it:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
-                        MetaElement("given", ["provided", "given", "presented"]),
-                        MetaElement("below", ["below", "here"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
+                        PositionalSynonyms("given", ["provided", "given", "presented"]),
+                        PositionalSynonyms("below", ["below", "here"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_line_breaking
                     ]
                 ),
@@ -123,40 +123,40 @@ QUESTION_PATTERNS = {
         },
         "Complex":{
             "Noun-Clauses":[
-                Pattern(
+                MetaTemplate(
                     "The question {given} {below} is what you should {answer}:{is_line_breaking}{{question}}",
                     [
 
-                        MetaElement("given", ["provided", "given", "presented"]),
-                        MetaElement("below", ["below", "here"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("given", ["provided", "given", "presented"]),
+                        PositionalSynonyms("below", ["below", "here"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "The question {given} {below} is what you should {answer} {considering}{what_you_see}the{is_provided}{image}:{is_line_breaking}{{question}}",
                     [
 
-                        MetaElement("given", ["provided", "given", "presented"]),
-                        MetaElement("below", ["below", "here"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
-                        MetaElement("considering", ["considering", "based on", "referring to"]),
-                        MetaElement("what_you_see", [" ", " what you see in ", " what you have seen in "]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
+                        PositionalSynonyms("given", ["provided", "given", "presented"]),
+                        PositionalSynonyms("below", ["below", "here"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("considering", ["considering", "based on", "referring to"]),
+                        PositionalSynonyms("what_you_see", [" ", " what you see in ", " what you have seen in "]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
                         is_line_breaking
                     ]
                 ),
             ],
             "Adjective-Clauses":[
-                Pattern(
+                MetaTemplate(
                     "The question {which} {adjective}{is_provided}{image} is{is_as_follows}{is_line_breaking}{{question}}",
                     [
-                        MetaElement("which", ["which", "that"]),
-                        MetaElement("adjective", ["is based on the", "is related to the", "you should refer to the", "you should consider the"]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
-                        MetaElement("is_as_follows",[":", " as follows:"]),
+                        PositionalSynonyms("which", ["which", "that"]),
+                        PositionalSynonyms("adjective", ["is based on the", "is related to the", "you should refer to the", "you should consider the"]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
+                        PositionalSynonyms("is_as_follows",[":", " as follows:"]),
                         is_line_breaking
                     ]
                 )
@@ -166,44 +166,44 @@ QUESTION_PATTERNS = {
     "Imperative":{
         "Simple":{
             "Subject-Predicate":[
-                Pattern(
+                MetaTemplate(
                     "{is_please}{answer_directly}:{is_line_breaking}{{question}}",
                     [   
-                        MetaElement("answer_directly", ["answer", "reply", "answer directly", "reply directly"]),
+                        PositionalSynonyms("answer_directly", ["answer", "reply", "answer directly", "reply directly"]),
                         is_please,
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{is_please}{answer_directly} {considering}{what_you_see}the{is_provided}{image}:{is_line_breaking}{{question}}",
                     [   
-                        MetaElement("answer_directly", ["answer", "reply", "answer directly", "reply directly"]),
-                        MetaElement("considering", ["considering", "based on", "referring to"]),
-                        MetaElement("what_you_see", [" ", " what you see in ", " what you have seen in "]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
+                        PositionalSynonyms("answer_directly", ["answer", "reply", "answer directly", "reply directly"]),
+                        PositionalSynonyms("considering", ["considering", "based on", "referring to"]),
+                        PositionalSynonyms("what_you_see", [" ", " what you see in ", " what you have seen in "]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
                         is_please,
                         is_line_breaking
                     ]
                 )
             ],
             "Subject-Verb-Object":[
-                Pattern(
+                MetaTemplate(
                     "{is_please}{answer} the{is_following}question:{is_line_breaking}{{question}}",
                     [   
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_please,
                         is_following,
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{is_please}{answer} the{is_following}question {related_to} the{is_provided}{image}:{is_line_breaking}{{question}}",
                     [   
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
-                        MetaElement("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
                         is_please,
                         is_following,
                         is_line_breaking
@@ -211,22 +211,22 @@ QUESTION_PATTERNS = {
                 )
             ],
             "Subject-Verb-IndirectObject-DirectObject":[
-                Pattern(
+                MetaTemplate(
                     "{verb} me {the_answer} to the question:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("verb", ["Give", "Provide"]),
-                        MetaElement("the_answer", ["your answer", "the correct answer", "a response"]),
+                        PositionalSynonyms("verb", ["Give", "Provide"]),
+                        PositionalSynonyms("the_answer", ["your answer", "the correct answer", "a response"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{verb} me {the_answer} to the question {related_to} the{is_provided}{image}:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("verb", ["Give", "Provide"]),
-                        MetaElement("the_answer", ["your answer", "the correct answer", "a response"]),
-                        MetaElement("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
+                        PositionalSynonyms("verb", ["Give", "Provide"]),
+                        PositionalSynonyms("the_answer", ["your answer", "the correct answer", "a response"]),
+                        PositionalSynonyms("related_to", ["about", "related to", "based on", "concerning", "regarding"]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
                         is_line_breaking
                     ]
                 )
@@ -234,14 +234,14 @@ QUESTION_PATTERNS = {
         },
         "Compound":{
             "Joined-By-Coordinating-Conjunctions":[
-                Pattern(
+                MetaTemplate(
                     "{is_please}{verb}{what_you_see}the{is_provided}{image} and {answer} the{is_following}question:{is_line_breaking}{{question}}", 
                     [
-                        MetaElement("verb", ["analyze", "refer to", "consider"]), 
-                        MetaElement("what_you_see", [" ", " what you see in ", " what you have seen in "]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("verb", ["analyze", "refer to", "consider"]), 
+                        PositionalSynonyms("what_you_see", [" ", " what you see in ", " what you have seen in "]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_line_breaking,
                         is_please,
                         is_following
@@ -249,14 +249,14 @@ QUESTION_PATTERNS = {
                 ),   
             ],
             "Joined-By-Semicolons":[
-                Pattern(
+                MetaTemplate(
                     "{is_please}{verb}{what_you_see}the{is_provided}{image}; {answer} the{is_following}question:{is_line_breaking}{{question}}", 
                     [
-                        MetaElement("verb", ["analyze", "refer to", "consider"]), 
-                        MetaElement("what_you_see", [" ", " what you see in ", " what you have seen in "]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("verb", ["analyze", "refer to", "consider"]), 
+                        PositionalSynonyms("what_you_see", [" ", " what you see in ", " what you have seen in "]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_line_breaking,
                         is_please,
                         is_following
@@ -266,27 +266,27 @@ QUESTION_PATTERNS = {
         },
         "Complex":{
             "Adverbial-Clauses":[
-                Pattern(
+                MetaTemplate(
                     "{verb}{what_you_see}the{is_provided}{image},{is_please}{answer} the{is_following}question:{is_line_breaking}{{question}}", 
                     [
-                        MetaElement("verb", ["Given", "Analyzing", "Referring to", "Considering"]), 
-                        MetaElement("what_you_see", [" ", " what you see in ", " what you have seen in "]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("verb", ["Given", "Analyzing", "Referring to", "Considering"]), 
+                        PositionalSynonyms("what_you_see", [" ", " what you see in ", " what you have seen in "]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_line_breaking,
                         is_please,
                         is_following
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{prep}{what_you_see}the{is_provided}{image},{is_please}{answer} the{is_following}question:{is_line_breaking}{{question}}", 
                     [
-                        MetaElement("prep", ["Based on", "From", "According to"]), 
-                        MetaElement("what_you_see", [" ", " what you see in ", " what you have seen in "]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("prep", ["Based on", "From", "According to"]), 
+                        PositionalSynonyms("what_you_see", [" ", " what you see in ", " what you have seen in "]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
                         is_line_breaking,
                         is_please,
                         is_following
@@ -294,14 +294,14 @@ QUESTION_PATTERNS = {
                 ),
             ],
             "Adjective-Clauses":[
-                Pattern(
+                MetaTemplate(
                     "{is_please}{answer} the question {which} {adjective}{is_provided}{image}:{is_line_breaking}{{question}}",
                     [
-                        MetaElement("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
-                        MetaElement("which", ["which", "that"]),
-                        MetaElement("adjective", ["is based on the", "is related to the", "you should refer to the", "you should consider the"]),
-                        MetaElement("is_provided", [" ", " provided "]),
-                        MetaElement("image", ["image", "picture"]),
+                        PositionalSynonyms("answer", ["answer", "determine the answer to", "respond to", "give your answer to", "provide your answer to"]),
+                        PositionalSynonyms("which", ["which", "that"]),
+                        PositionalSynonyms("adjective", ["is based on the", "is related to the", "you should refer to the", "you should consider the"]),
+                        PositionalSynonyms("is_provided", [" ", " provided "]),
+                        PositionalSynonyms("image", ["image", "picture"]),
                         is_please,
                         is_line_breaking
                     ]
@@ -311,10 +311,10 @@ QUESTION_PATTERNS = {
     }
 }
 
-# Choices Patterns
-CHOICES_PATTERNS = {
+# Choices MetaTemplates
+ChoiceMetaTemplates = {
     "Empty":[
-        Pattern(
+        MetaTemplate(
             "{{choices}}"
         ),
     ],
@@ -322,42 +322,42 @@ CHOICES_PATTERNS = {
         "Simple":{
             "Subject-LinkingVerb-Complement":[
                 # Omit the linkingVerb: Choices (are)
-                Pattern(
+                MetaTemplate(
                     "{is_the}{is_available}{choices}{are}{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("is_the", [" ", "the"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
-                        MetaElement("are", [":", " are:"]),
+                        PositionalSynonyms("is_the", [" ", "the"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("are", [":", " are:"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{is_the}{is_available}{choices} are as follows:{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("is_the", [" ", "the"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("is_the", [" ", "the"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{is_the}{is_available}{choices} are {provided}{below}{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("is_the", [" ", "the"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
-                        MetaElement("provided", ["provided", "offered", "presented", "listed"]),
-                        MetaElement("below", [":", " below:", " here:", " as follows:"]),
+                        PositionalSynonyms("is_the", [" ", "the"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("provided", ["provided", "offered", "presented", "listed"]),
+                        PositionalSynonyms("below", [":", " below:", " here:", " as follows:"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{adv} are the{is_available}{choices}:{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("adv", ["The following", "Here", "Below", "Presented below", "Presented here"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("adv", ["The following", "Here", "Below", "Presented below", "Presented here"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
                         is_line_breaking
                     ]
                 ),
@@ -365,32 +365,32 @@ CHOICES_PATTERNS = {
         },
         "Compound":{
             "Joined-By-Coordinating-Conjunctions":[
-                Pattern(
+                MetaTemplate(
                     "{is_the}{is_available}{choices} are {provided} {below} {conjunction} you should {verb} {object}:{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("is_the", [" ", "the"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
-                        MetaElement("provided", ["provided", "offered", "presented", "listed"]),
-                        MetaElement("below", ["below", "here", "as follows"]),
-                        MetaElement("conjunction", ["and", "then"]),
-                        MetaElement("verb", ["select", "choose", "pick"]),
-                        MetaElement("object", ["the best one", "the best fit", "the best answer"]),
+                        PositionalSynonyms("is_the", [" ", "the"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("provided", ["provided", "offered", "presented", "listed"]),
+                        PositionalSynonyms("below", ["below", "here", "as follows"]),
+                        PositionalSynonyms("conjunction", ["and", "then"]),
+                        PositionalSynonyms("verb", ["select", "choose", "pick"]),
+                        PositionalSynonyms("object", ["the best one", "the best fit", "the best answer"]),
                         is_line_breaking
                     ]
                 ),
             ],
             "Joined-By-Semicolons":[
-                Pattern(
+                MetaTemplate(
                     "{is_the}{is_available}{choices} are {provided} {below}; you should {verb} {object}:{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("is_the", [" ", "the"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
-                        MetaElement("provided", ["provided", "offered", "presented", "listed"]),
-                        MetaElement("below", ["below", "here", "as follows"]),
-                        MetaElement("verb", ["select", "choose", "pick"]),
-                        MetaElement("object", ["the best one", "the best fit", "the best answer"]),
+                        PositionalSynonyms("is_the", [" ", "the"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("provided", ["provided", "offered", "presented", "listed"]),
+                        PositionalSynonyms("below", ["below", "here", "as follows"]),
+                        PositionalSynonyms("verb", ["select", "choose", "pick"]),
+                        PositionalSynonyms("object", ["the best one", "the best fit", "the best answer"]),
                         is_line_breaking
                     ]
                 ),
@@ -398,50 +398,50 @@ CHOICES_PATTERNS = {
         },
         "Complex":{
             "Adjective-Clauses":[
-                Pattern(
+                MetaTemplate(
                     "{is_the}{is_available}{choices} {which} include only one {correct} answer{are}{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("is_the", [" ", "the"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
-                        MetaElement("which", ["which", "that"]),
-                        MetaElement("correct", ["correct", "best", "most suitable"]),
-                        MetaElement("are", [":", " are:"]),
+                        PositionalSynonyms("is_the", [" ", "the"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("which", ["which", "that"]),
+                        PositionalSynonyms("correct", ["correct", "best", "most suitable"]),
+                        PositionalSynonyms("are", [":", " are:"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{is_the}{is_available}{choices} {which} include only one {correct} answer are as follows:{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("is_the", [" ", "the"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
-                        MetaElement("which", ["which", "that"]),
-                        MetaElement("correct", ["correct", "best", "most suitable"]),
+                        PositionalSynonyms("is_the", [" ", "the"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("which", ["which", "that"]),
+                        PositionalSynonyms("correct", ["correct", "best", "most suitable"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{is_the}{is_available}{choices} {which} include only one {correct} answer are {provided}{below}{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("is_the", [" ", "the"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
-                        MetaElement("which", ["which", "that"]),
-                        MetaElement("correct", ["correct", "best", "most suitable"]),
-                        MetaElement("provided", ["provided", "offered", "presented", "listed"]),
-                        MetaElement("below", [":", " below:", " here:", " as follows:"]),
+                        PositionalSynonyms("is_the", [" ", "the"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("which", ["which", "that"]),
+                        PositionalSynonyms("correct", ["correct", "best", "most suitable"]),
+                        PositionalSynonyms("provided", ["provided", "offered", "presented", "listed"]),
+                        PositionalSynonyms("below", [":", " below:", " here:", " as follows:"]),
                         is_line_breaking
                     ]
                 ),
-                Pattern(
+                MetaTemplate(
                     "{adv} are the{is_available}{choices} {which} include only one {correct} answer:{is_line_breaking}{{choices}}",
                     [
-                        MetaElement("adv", ["The following", "Here", "Below", "Presented below", "Presented here"]),
-                        MetaElement("is_available", [" ", " available ", " potential ", " possible "]),
-                        MetaElement("choices", ["choices", "options", "selections"]),
-                        MetaElement("which", ["which", "that"]),
-                        MetaElement("correct", ["correct", "best", "most suitable"]),
+                        PositionalSynonyms("adv", ["The following", "Here", "Below", "Presented below", "Presented here"]),
+                        PositionalSynonyms("is_available", [" ", " available ", " potential ", " possible "]),
+                        PositionalSynonyms("choices", ["choices", "options", "selections"]),
+                        PositionalSynonyms("which", ["which", "that"]),
+                        PositionalSynonyms("correct", ["correct", "best", "most suitable"]),
                         is_line_breaking
                     ]
                 ),
@@ -451,35 +451,35 @@ CHOICES_PATTERNS = {
     "Imperative":{
         "Simple":{
             "Subject-Predicate":[
-                Pattern(
+                MetaTemplate(
                     "{is_please}{verb} from:{choice}{{choices}}",
                     [
-                        MetaElement("verb", ["pick", "select", "choose"]),
-                        MetaElement("choice", ["\nChoices: ", "\nOptions: ", "\n"]),
+                        PositionalSynonyms("verb", ["pick", "select", "choose"]),
+                        PositionalSynonyms("choice", ["\nChoices: ", "\nOptions: ", "\n"]),
                         is_please
                     ]
                 )
             ],
             "Subject-Verb-Object":[
                 # Omit the subject
-                Pattern(
+                MetaTemplate(
                     "{is_please}{verb} the{adj}{answer}{from}{to} the question.{choice}{{choices}}",
                     [
-                        MetaElement("verb", ["make", "pick", "indicate", "select", "choose"]),
-                        MetaElement("adj", [" right ", " correct ", " accurate ", " "]),
-                        MetaElement("answer", ["answer", "choice", "option", "response", "solution"]),
-                        MetaElement("from", [
+                        PositionalSynonyms("verb", ["make", "pick", "indicate", "select", "choose"]),
+                        PositionalSynonyms("adj", [" right ", " correct ", " accurate ", " "]),
+                        PositionalSynonyms("answer", ["answer", "choice", "option", "response", "solution"]),
+                        PositionalSynonyms("from", [
                             " from the provided options ", " from the options given ",
                             " from the provided choices ", " from the choices given ", 
                             " from the choices below ", " from the options below ", 
                             " from the available choices ", " from the available options ", " "
                         ]),
-                        MetaElement("to", [
+                        PositionalSynonyms("to", [
                             "to correctly answer", "to answer", 
                             "to correctly address", "to address", 
                             "to correctly respond to", "to respond to"
                         ]),
-                        MetaElement("choice", ["\nChoices: ", "\nOptions: ", "\n"]),
+                        PositionalSynonyms("choice", ["\nChoices: ", "\nOptions: ", "\n"]),
                         is_please
                     ]
                 )
@@ -487,26 +487,26 @@ CHOICES_PATTERNS = {
         },
         "Complex":{
             "Adjective-Clauses":[
-                Pattern(
+                MetaTemplate(
                     "{is_please}{verb} the{adj}{answer}{from}{which} include only one {correct} answer {to} the question.{choice}{{choices}}",
                     [
-                        MetaElement("verb", ["make", "pick", "indicate", "select", "choose"]),
-                        MetaElement("adj", [" right ", " correct ", " accurate ", " "]),
-                        MetaElement("answer", ["answer", "choice", "option", "response", "solution"]),
-                        MetaElement("from", [
+                        PositionalSynonyms("verb", ["make", "pick", "indicate", "select", "choose"]),
+                        PositionalSynonyms("adj", [" right ", " correct ", " accurate ", " "]),
+                        PositionalSynonyms("answer", ["answer", "choice", "option", "response", "solution"]),
+                        PositionalSynonyms("from", [
                             " from the provided options ", " from the options given ",
                             " from the provided choices ", " from the choices given ", 
                             " from the choices below ", " from the options below ", 
                             " from the available choices ", " from the available options ", " "
                         ]),
-                        MetaElement("which", ["which", "that"]),
-                        MetaElement("correct", ["correct", "best", "most suitable"]),
-                        MetaElement("to", [
+                        PositionalSynonyms("which", ["which", "that"]),
+                        PositionalSynonyms("correct", ["correct", "best", "most suitable"]),
+                        PositionalSynonyms("to", [
                             "to correctly answer", "to answer", 
                             "to correctly address", "to address", 
                             "to correctly respond to", "to respond to"
                         ]),
-                        MetaElement("choice", ["\nChoices: ", "\nOptions: ", "\n"]),
+                        PositionalSynonyms("choice", ["\nChoices: ", "\nOptions: ", "\n"]),
                         is_please
                     ]
                 )
