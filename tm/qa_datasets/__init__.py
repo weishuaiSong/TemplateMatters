@@ -1,1 +1,1 @@
-from .single_imageqa_datasets import SingleImageQADataset
+from .single_imageqa_datasets import SingleImageQADataset, set_imageqa_dataset_key, list_imageqa_datasets

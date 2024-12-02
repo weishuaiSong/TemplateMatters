@@ -19,6 +19,15 @@ single_image_qa_datasets = {
 }
 
 
+def set_imageqa_dataset_key(model_name, key):
+    single_image_qa_datasets[model_name] = (
+        single_image_qa_datasets[model_name][0], key)
+
+
+def list_imageqa_datasets():
+    return list(single_image_qa_datasets.keys())
+
+
 class SingleImageQADataset(BaseSingleVQADataset):
     def __init__(
         self,
