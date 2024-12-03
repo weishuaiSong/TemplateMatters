@@ -18,17 +18,17 @@ imageqa_models = {
     "internvl-chat-v1.5": ("InternVLChat", 'failspy/InternVL-Chat-V1-5-quantable'),
     "idefics2-8b": ("IDEFICS2", "HuggingFaceM4/idefics2-8b"),
 
-    "llavav1.5-7b-lora-100-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-100-templated"),
-    "llavav1.5-7b-lora-1k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-1k-templated"),
-    "llavav1.5-7b-lora-5k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-5k-templated"),
-    "llavav1.5-7b-lora-10k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-10k-templated"),
-    "llavav1.5-7b-lora-15k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-15k-templated"),
+    "llavav1.5-7b-100-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-100-templated"),
+    "llavav1.5-7b-1k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-1k-templated"),
+    "llavav1.5-7b-5k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-5k-templated"),
+    "llavav1.5-7b-10k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-10k-templated"),
+    "llavav1.5-7b-15k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-15k-templated"),
 
-    "llavav1.5-13b-lora-100-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-100-templated"),
-    "llavav1.5-13b-lora-1k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-1k-templated"),
-    "llavav1.5-13b-lora-5k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-5k-templated"),
-    "llavav1.5-13b-lora-10k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-10k-templated"),
-    "llavav1.5-13b-lora-15k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-15k-templated"),
+    "llavav1.5-13b-100-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-100-templated"),
+    "llavav1.5-13b-1k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-1k-templated"),
+    "llavav1.5-13b-5k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-5k-templated"),
+    "llavav1.5-13b-10k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-10k-templated"),
+    "llavav1.5-13b-15k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-15k-templated"),
 
 }
 
@@ -49,7 +49,7 @@ class ImageQAModel(QAModel):
         torch_device: Union[int, str] = -1,
         precision=torch.bfloat16,
         choice_format='letter',
-        enable_choice_search: bool = False,
+        enable_choice_search: bool = True,
         cache_path: str = None,
 
     ):

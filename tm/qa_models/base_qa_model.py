@@ -18,7 +18,7 @@ class QAModel():
         self,
         model_name: str,
         choice_format='letter',
-        enable_choice_search: bool = False,
+        enable_choice_search: bool = True,
         cache_path: str = None,
     ):
         self.model = None
@@ -104,7 +104,6 @@ class QAModel():
 
         result = {
             "prompt": prompt,
-            "choices": choices.copy(),
             "free_form_answer": free_form_answer,
             "multiple_choice_answer": multiple_choice_answer,
         }

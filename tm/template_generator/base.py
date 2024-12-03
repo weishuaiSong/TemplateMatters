@@ -55,7 +55,7 @@ class MetaTemplate:
         return len(self.placeholders)
 
     @property
-    def num_potential_prompts(self):
+    def num_potential_templates(self):
         return reduce(lambda x, y: x * y.num_candidates, self.positional_synonyms or [], 1)
 
     def fit_meta_template(self):
@@ -86,7 +86,10 @@ class Node:
         if self.is_leaf():
             # Weights are based on the number of placeholders of the meta_template
             # Add-one smoothing
-            self.weight = self.meta_template.num_placeholders + 1
+            # self.weight = self.meta_template.num_placeholders + 1
+
+            # Weights are based on the number of potentail generated templates of the meta_template
+            self.weight = self.meta_template.num_potential_templates
         else:
             self.weight = sum(child.balance_weights()
                               for child in self.children)
@@ -107,14 +110,14 @@ class TemplateGenerator:
             self.root.balance_weights()
 
     @property
-    def num_all_potential_prompts(self) -> int:
-        return self._get_total_prompts(self.root)
+    def num_all_potential_templates(self) -> int:
+        return self._get_total_templates(self.root)
 
-    def _get_total_prompts(self, node: Node) -> int:
+    def _get_total_templates(self, node: Node) -> int:
         if node.is_leaf():
-            return node.meta_template.num_potential_prompts
+            return node.meta_template.num_potential_templates
         else:
-            return sum(self._get_total_prompts(child) for child in node.children)
+            return sum(self._get_total_templates(child) for child in node.children)
 
     def _build_taxonomy(self, data: Union[dict, list], name: str = '') -> Node:
         if isinstance(data, dict):

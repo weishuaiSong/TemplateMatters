@@ -16,8 +16,8 @@ class QuestionTemplateGenerator:
         return self.generator.generate()
 
     @property
-    def num_all_potential_prompts(self):
-        return self.generator.num_all_potential_prompts
+    def num_all_potential_templates(self):
+        return self.generator.num_all_potential_templates
 
 
 class ChoiceTemplateGenerator:
@@ -29,8 +29,8 @@ class ChoiceTemplateGenerator:
         return self.generator.generate()
 
     @property
-    def num_all_potential_prompts(self):
-        return self.generator.num_all_potential_prompts
+    def num_all_potential_templates(self):
+        return self.generator.num_all_potential_templates
 
 
 class VQATemplateGenerator:
@@ -53,15 +53,15 @@ class VQATemplateGenerator:
         return '\n'.join(templates)
 
     @property
-    def num_all_potential_prompts(self):
-        total = self.question_template_generator.num_all_potential_prompts * \
-            self.choices_template_generator.num_all_potential_prompts
+    def num_all_potential_templates(self):
+        total = self.question_template_generator.num_all_potential_templates * \
+            self.choices_template_generator.num_all_potential_templates
         return total
 
 
 def generate_templates_set(template_generator, num_templates: int):
-    """Generate a specified number of prompts with no duplicate elements"""
-    assert num_templates <= template_generator().num_all_potential_prompts, (
+    """Generate a specified number of templates with no duplicate elements"""
+    assert num_templates <= template_generator().num_all_potential_templates, (
         "The number of generated templates should be less than or equal to the capacity of the template generator."
     )
     templates_set = set()
