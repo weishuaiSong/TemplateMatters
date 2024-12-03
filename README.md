@@ -1,5 +1,7 @@
 <h2 align="center"> <a href="">🎁Template Matters🎁</a></h2>
 
+<h5 align="center"> If you like our project, please give us a star ⭐ on GitHub.  </h2>
+
 ## 🔔News
   
  **🔥[2024-12-04]: Code released!**
