@@ -120,7 +120,7 @@ print(len(training_templates))
 Then you should add the templates to the instruction part of your insturction-tuning dataset.
 
 ### Checkpoints
-The 10 model checkpoints involved in our paper can be found [here](https://huggingface.co/collections/shijianS01/templatematters-model-674dd4469a2382bb17bb3460).
+**The 10 model checkpoints involved in our paper can be found [here](https://huggingface.co/collections/shijianS01/templatematters-model-674dd4469a2382bb17bb3460).**
 
 We also support these models, you can simply load the model as follows:
 ```python
