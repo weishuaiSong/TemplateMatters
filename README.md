@@ -53,7 +53,7 @@ print(template)
 # Available options are listed below and you should pick the best answer:
 # {choices}
 prompt = template.format(
-    question="How many cants are there in the image?"
+    question="How many cats are there in the image?"
     choices="(A) 1 (B) 2 (C) 3 (D) 4"
 )
 
