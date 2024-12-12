@@ -15,7 +15,8 @@ We compare the best and worst accuracy of eight prominent MLMs across 100 differ
 
 
 ## 🔔News
-  
+ **🔥[2024-12-12]: Paper arXived!**
+
  **🔥[2024-12-04]: Code released!**
 
 ## What's TemplateMatters ?
