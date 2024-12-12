@@ -1,4 +1,4 @@
-<h2 align="center"> <a href="">🎁Template Matters🎁: Understanding the Role of Instruction Templates in Multimodal Language Model Evaluation and Training
+<h2 align="center"> <a href="https://arxiv.org/abs/2412.08307">🎁Template Matters🎁: Understanding the Role of Instruction Templates in Multimodal Language Model Evaluation and Training
 </a></h2>
 
 <h5 align="center"> If you like our project, please give us a star ⭐ on GitHub.  </h2>
@@ -11,7 +11,7 @@
 **The left (a) illustrates the high sensitivity of Multimodal Language Models (MLMs) to variations in instruction templates.** 
 We compare the best and worst accuracy of eight prominent MLMs across 100 different instruction templates on the MMBench dataset. The accuracy gaps are marked in red bold; **The right (b) shows that visual instruction tuning with diverse instruction templates significantly improves MLM's performance and reduces the performance variance.** LLaVA-1.5-7B trained with diverse instruction templates achieves the highest average performance and the lowest performance variance among similar-scale MLMs on the SeedBench dataset, evaluated across 25 instruction templates that are not included in the training. 
 
-<h2 align="center"> <a href="">📑 Paper</a> | <a href="https://huggingface.co/collections/shijianS01/templatematters-model-674dd4469a2382bb17bb3460">🤗 Huggingface Model</a></a></h2>
+<h2 align="center"> <a href="https://arxiv.org/abs/2412.08307">📑 Paper</a> | <a href="https://huggingface.co/collections/shijianS01/templatematters-model-674dd4469a2382bb17bb3460">🤗 Huggingface Model</a></a></h2>
 
 
 ## 🔔News
