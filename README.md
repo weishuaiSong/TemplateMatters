@@ -169,3 +169,16 @@ We tested our tuned models on 100 generator-created templates ([Complex](https:/
 
 ## Contact
 - Shijian Wang: shijian@seu.edu.cn
+
+## Citation
+
+**BibTeX:**
+
+```bibtex
+@article{wang2024template,
+  title={Template Matters: Understanding the Role of Instruction Templates in Multimodal Language Model Evaluation and Training},
+  author={Wang, Shijian and Song, Linxin and Zhang, Jieyu and Shimizu, Ryotaro and Luo, Ao and Yao, Li and Chen, Cunjian and McAuley, Julian and Wu, Hanqian},
+  journal={arXiv preprint arXiv:2412.08307},
+  year={2024}
+}
+```
