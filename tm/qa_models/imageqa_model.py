@@ -116,7 +116,7 @@ class LLaVA(QAModelInstance):
             self.processor = AutoProcessor.from_pretrained(
                 "llava-hf/llava-1.5-7b-hf", device_map=torch_device)
         elif ckpt in {
-                "llava-hf/llava-1.5-7b-hf",
+                "llava-hf/llava-1.5-13b-hf",
                 "shijianS01/llava-v1.5-13b-lora-100-templated",
                 "shijianS01/llava-v1.5-13b-lora-1k-templated",
                 "shijianS01/llava-v1.5-13b-lora-5k-templated",
