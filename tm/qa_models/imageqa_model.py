@@ -40,6 +40,30 @@ def set_imageqa_model_key(model_name, key):
 def list_imageqa_models():
     return list(imageqa_models.keys())
 
+def calculate_log_probs(scores):
+    """Compute the average log probability correctly.
+    
+    Steps:
+    1. Apply softmax to logits to get probabilities.
+    2. Select the maximum probability.
+    3. Compute the log probability of the selected maximum.
+    4. Convert the log probability back to normal probability using exp.
+    5. Return the average probability.
+    """
+    log_probs = []
+    
+    for logits in scores:
+        probs = F.softmax(logits, dim=-1)  # Step 1: Apply softmax
+        max_prob, _ = torch.max(probs, dim=-1)  # Step 2: Select the max probability
+        log_prob = torch.log(max_prob).item()  # Step 3: Compute log probability
+        log_probs.append(log_prob)
+    
+    avg_log_prob = sum(log_probs) / len(log_probs) if log_probs else None  # Compute average log probability
+
+    # Step 4: Convert log probability back to normal probability
+    avg_prob = torch.exp(torch.tensor(avg_log_prob)).item() if avg_log_prob is not None else None
+    print(avg_prob)
+    return avg_prob  # Step 5: Return final probability
 
 class ImageQAModel(QAModel):
     def __init__(
@@ -140,21 +164,22 @@ class LLaVA(QAModelInstance):
             image = Image.open(image).convert('RGB')
 
         prompt = "USER: <image>\n" + prompt + "\nASSISTANT:"
-        if isinstance(self.model, torch.nn.DataParallel):
-            inputs = self.processor(prompt, image, return_tensors='pt').to(
-                next(self.model.parameters()).device)
-            out = self.model.module.generate(
-                **inputs, max_new_tokens=200, do_sample=False)
-        else:
-            inputs = self.processor(
-                prompt, image, return_tensors='pt').to(self.model.device)
-            out = self.model.generate(
-                **inputs, max_new_tokens=200, do_sample=False)
-        answer = self.processor.decode(
-            out[0], skip_special_tokens=True).split("ASSISTANT:")[-1].strip()
+        inputs = self.processor(prompt, image, return_tensors='pt').to(self.model.device)
+        
+        output = self.model.generate(
+            **inputs,
+            max_new_tokens=200,
+            do_sample=False,
+            return_dict_in_generate=True,
+            output_scores=True
+        )
+        
+        decoded_output = self.processor.decode(output.sequences[0], skip_special_tokens=True)
+        answer = decoded_output.split("ASSISTANT:")[-1].strip()
+        
+        log_prob = calculate_log_probs(output.scores)
 
-        return answer
-
+        return answer,log_prob
 
 class QwenVL(QAModelInstance):
     def __init__(self, ckpt="Qwen/Qwen-VL", torch_device=torch.device("cuda"), model_precision=torch.float32):

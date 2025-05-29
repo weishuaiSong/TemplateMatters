@@ -57,11 +57,13 @@ class QAModel():
         else:
             with diskcache.Cache(self.cache_path, size_limit=10 * (2 ** 30)) as cache:
                 key = json.dumps([self._data_to_str(data), prompt])
-                response = cache.get(key, None)
-                if response is None:
-                    response = self.model.qa(data, prompt)
-                    cache.set(key, response)
-                return response
+                result = cache.get(key, None)
+                if result is None:
+                    response, log_prob = self.model.qa(data, prompt)
+                    cache.set(key, (response, log_prob))
+                else:
+                    response, log_prob = result
+                return response, log_prob
 
     @torch.no_grad()
     def qa(self, image, question):
@@ -95,7 +97,7 @@ class QAModel():
         # Get VQA model's answer
         prefix1, prefix2, options = make_options(choices, self.format)
         prompt = prompt_func(question, options) if prompt_func else self.default_prompt_func(question, options)
-        free_form_answer = self._qa(image, prompt)
+        free_form_answer,log_prob = self._qa(image, prompt)
         free_form_answer = free_form_answer.strip()
 
         # Limit the answer to the choices
@@ -111,6 +113,7 @@ class QAModel():
         if answer is not None:
             result["answer"] = answer
             result["accuracy"] = int(answer == multiple_choice_answer)
+            result["log_prob"] = log_prob
         return result
 
     @torch.no_grad()
