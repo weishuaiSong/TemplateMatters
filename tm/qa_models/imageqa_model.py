@@ -6,6 +6,8 @@ from transformers import image_utils
 
 from .base_qa_model import QAModelInstance, QAModel
 from .utils import image_to_base64, load_image
+import torch.nn.functional as F
+from .base_qa_model import QAModel
 
 imageqa_models = {
 
@@ -62,10 +64,10 @@ def calculate_log_probs(scores):
 
     # Step 4: Convert log probability back to normal probability
     avg_prob = torch.exp(torch.tensor(avg_log_prob)).item() if avg_log_prob is not None else None
-    print(avg_prob)
     return avg_prob  # Step 5: Return final probability
 
 class ImageQAModel(QAModel):
+   
     def __init__(
         self,
         model_name: str,
@@ -77,6 +79,7 @@ class ImageQAModel(QAModel):
         cache_path: str = None,
 
     ):
+        from transformers import AutoProcessor, LlavaForConditionalGeneration
         super().__init__(model_name, choice_format, enable_choice_search, cache_path)
 
         if isinstance(torch_device, str):

@@ -36,8 +36,8 @@ class QAModel():
         self.enable_choice_search = enable_choice_search
         # If enable_choice_search:
         # Use SBERT to find the closest choice
-        self.sentence_transformer = sentence_transformers.SentenceTransformer(
-            "all-mpnet-base-v2", device='cpu')
+        # self.sentence_transformer = sentence_transformers.SentenceTransformer(
+        #     "all-mpnet-base-v2", device='cpu')
 
     @torch.no_grad()
     def choice_search(self, free_form_answer, choices):
@@ -101,18 +101,18 @@ class QAModel():
         free_form_answer = free_form_answer.strip()
 
         # Limit the answer to the choices
-        multiple_choice_answer = self._limit_answer(
-            free_form_answer, choices, prefix1, prefix2, options)
+        # multiple_choice_answer = self._limit_answer(
+        #     free_form_answer, choices, prefix1, prefix2, options)
 
         result = {
             "prompt": prompt,
             "free_form_answer": free_form_answer,
-            "multiple_choice_answer": multiple_choice_answer,
+            # "multiple_choice_answer": multiple_choice_answer,
         }
 
         if answer is not None:
             result["answer"] = answer
-            result["accuracy"] = int(answer == multiple_choice_answer)
+            # result["accuracy"] = int(answer == multiple_choice_answer)
             result["log_prob"] = log_prob
         return result
 
