@@ -20,14 +20,14 @@ imageqa_models = {
     "internvl-chat-v1.5": ("InternVLChat", 'failspy/InternVL-Chat-V1-5-quantable'),
     "idefics2-8b": ("IDEFICS2", "HuggingFaceM4/idefics2-8b"),
 
-    "llavav1.5-7b-10-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-10-templated"),
+    "llavav1.5-7b-10-templated": ('LLaVA', "/mnt/ali-sh-1/usr/tusen/tmp-dev/shijian/template-scaling/LLaVA/checkpoints/hf_models/llava-v1.5-7b-lora-10-templated"),
     "llavav1.5-7b-100-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-100-templated"),
     "llavav1.5-7b-1k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-1k-templated"),
     "llavav1.5-7b-5k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-5k-templated"),
     "llavav1.5-7b-10k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-10k-templated"),
     "llavav1.5-7b-15k-templated": ('LLaVA', "shijianS01/llava-v1.5-7b-lora-15k-templated"),
 
-    "llavav1.5-13b-10-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-10-templated"),
+    "llavav1.5-13b-10-templated": ('LLaVA', "/mnt/ali-sh-1/usr/tusen/tmp-dev/shijian/template-scaling/LLaVA/checkpoints/hf_models/llava-v1.5-13b-lora-10-templated"),
     "llavav1.5-13b-100-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-100-templated"),
     "llavav1.5-13b-1k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-1k-templated"),
     "llavav1.5-13b-5k-templated": ('LLaVA', "shijianS01/llava-v1.5-13b-lora-5k-templated"),
@@ -129,7 +129,7 @@ class LLaVA(QAModelInstance):
                 ckpt, device_map=torch_device)
         elif ckpt in {
                 "llava-hf/llava-1.5-7b-hf",
-                "shijianS01/llava-v1.5-7b-lora-10-templated",
+                "/mnt/ali-sh-1/usr/tusen/tmp-dev/shijian/template-scaling/LLaVA/checkpoints/hf_models/llava-v1.5-7b-lora-10-templated",
                 "shijianS01/llava-v1.5-7b-lora-100-templated",
                 "shijianS01/llava-v1.5-7b-lora-1k-templated",
                 "shijianS01/llava-v1.5-7b-lora-5k-templated",
@@ -147,7 +147,7 @@ class LLaVA(QAModelInstance):
                 "llava-hf/llava-1.5-7b-hf", device_map=torch_device)
         elif ckpt in {
                 "llava-hf/llava-1.5-13b-hf",
-                "shijianS01/llava-v1.5-13b-lora-10-templated",
+                "/mnt/ali-sh-1/usr/tusen/tmp-dev/shijian/template-scaling/LLaVA/checkpoints/hf_models/llava-v1.5-13b-lora-10-templated",
                 "shijianS01/llava-v1.5-13b-lora-100-templated",
                 "shijianS01/llava-v1.5-13b-lora-1k-templated",
                 "shijianS01/llava-v1.5-13b-lora-5k-templated",
@@ -157,32 +157,6 @@ class LLaVA(QAModelInstance):
             from transformers import AutoProcessor, LlavaForConditionalGeneration
             self.model = LlavaForConditionalGeneration.from_pretrained(
                 ckpt,
-                torch_dtype=model_precision,
-                low_cpu_mem_usage=True,
-                device_map=torch_device,
-            ).eval()
-            self.processor = AutoProcessor.from_pretrained(
-                "llava-hf/llava-1.5-13b-hf", device_map=torch_device)
-            
-        elif ckpt in {
-                "shijianS01/llava-v1.5-7b-lora-10-templated",
-        }:
-            from transformers import AutoProcessor, LlavaForConditionalGeneration
-            self.model = LlavaForConditionalGeneration.from_pretrained(
-                "/mnt/ali-sh-1/usr/tusen/tmp-dev/shijian/template-scaling/LLaVA/checkpoints/hf_models/llava-v1.5-7b-lora-10-templated",
-                torch_dtype=model_precision,
-                low_cpu_mem_usage=True,
-                device_map=torch_device,
-            ).eval()
-            self.processor = AutoProcessor.from_pretrained(
-                "llava-hf/llava-1.5-7b-hf", device_map=torch_device)
-                    
-        elif ckpt in {
-                "shijianS01/llava-v1.5-13b-lora-10-templated",
-        }:
-            from transformers import AutoProcessor, LlavaForConditionalGeneration
-            self.model = LlavaForConditionalGeneration.from_pretrained(
-                "/mnt/ali-sh-1/usr/tusen/tmp-dev/shijian/template-scaling/LLaVA/checkpoints/hf_models/llava-v1.5-13b-lora-10-templated",
                 torch_dtype=model_precision,
                 low_cpu_mem_usage=True,
                 device_map=torch_device,
