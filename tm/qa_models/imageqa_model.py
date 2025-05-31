@@ -163,6 +163,32 @@ class LLaVA(QAModelInstance):
             ).eval()
             self.processor = AutoProcessor.from_pretrained(
                 "llava-hf/llava-1.5-13b-hf", device_map=torch_device)
+            
+        elif ckpt in {
+                "shijianS01/llava-v1.5-7b-lora-10-templated",
+        }:
+            from transformers import AutoProcessor, LlavaForConditionalGeneration
+            self.model = LlavaForConditionalGeneration.from_pretrained(
+                "/mnt/ali-sh-1/usr/tusen/tmp-dev/shijian/template-scaling/LLaVA/checkpoints/hf_models/llava-v1.5-7b-lora-10-templated",
+                torch_dtype=model_precision,
+                low_cpu_mem_usage=True,
+                device_map=torch_device,
+            ).eval()
+            self.processor = AutoProcessor.from_pretrained(
+                "llava-hf/llava-1.5-7b-hf", device_map=torch_device)
+                    
+        elif ckpt in {
+                "shijianS01/llava-v1.5-13b-lora-10-templated",
+        }:
+            from transformers import AutoProcessor, LlavaForConditionalGeneration
+            self.model = LlavaForConditionalGeneration.from_pretrained(
+                "/mnt/ali-sh-1/usr/tusen/tmp-dev/shijian/template-scaling/LLaVA/checkpoints/hf_models/llava-v1.5-13b-lora-10-templated",
+                torch_dtype=model_precision,
+                low_cpu_mem_usage=True,
+                device_map=torch_device,
+            ).eval()
+            self.processor = AutoProcessor.from_pretrained(
+                "llava-hf/llava-1.5-13b-hf", device_map=torch_device)
         else:
             raise ValueError("Not Implemented")
 

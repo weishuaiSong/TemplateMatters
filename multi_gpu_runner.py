@@ -28,7 +28,6 @@ def run_inference(args, full_dataset, start_idx, end_idx):
     # 只处理指定范围的数据
     for i in tqdm(range(start_idx, end_idx), desc=f"GPU {args.torch_device} Processing"):
         item = full_dataset[i]
-        print(type(item))
         question = item["question"]
         choices = item["choices"]
         answer = item["answer"]
@@ -54,7 +53,7 @@ def run_inference(args, full_dataset, start_idx, end_idx):
         N = len(templates)
         logprob_matrix = []
 
-        for i in tqdm(range(N), desc="Scoring templates", leave=False):  # <-- tqdm added here
+        for i in tqdm(range(N), desc="Scoring templates", leave=False): 
             row = []
             for j in range(N):
                 current_prompt = build_prompt_func(templates[i])(question, choices)
@@ -93,6 +92,10 @@ def run_inference(args, full_dataset, start_idx, end_idx):
                     token_id = inputs.input_ids[0, token_position].item()
                     token_log_prob = log_probs[pred_position, token_id].item()
                     total_log_prob += token_log_prob
+                response_token_len = inputs.input_ids.shape[1] - prompt_length
+                total_log_prob /= response_token_len if response_token_len > 0 else 1
+
+
 
                 row.append(total_log_prob)
             logprob_matrix.append(row)
@@ -101,7 +104,7 @@ def run_inference(args, full_dataset, start_idx, end_idx):
         psi = 0.0
         for i in range(N):
             for j in range(N):
-                psi += abs(logprob_matrix[j][i] - logprob_matrix[j][j]) / 200
+                psi += abs(logprob_matrix[j][i] - logprob_matrix[j][j])
         posix = psi / (N * (N - 1))
 
         # Step 7: Store result
@@ -134,7 +137,7 @@ if __name__ == "__main__":
     parser.add_argument("--model_name", type=str, required=True)
     parser.add_argument("--dataset_name", type=str, required=True)
     parser.add_argument("--template_path", type=str, required=True)
-    parser.add_argument("--output_path", type=str, default="final_result.json")
+    parser.add_argument("--output_path", type=str, default="output")
     parser.add_argument("--gpu_ids", type=str, required=True, help="Comma separated GPU ids, e.g., 0,2,3")
     args = parser.parse_args()
 
@@ -159,7 +162,8 @@ if __name__ == "__main__":
 
     all_results = []
     for i in range(num_gpus):
-        partial_path = f"{args.model_name}_{args.dataset_name}_results_rank{i}.json"
+        partial_path = os.path.join(args.output_path,
+                                    f"{args.model_name}_{args.dataset_name}_results_rank{i}.json")
         with open(partial_path) as f:
             all_results.extend(json.load(f))
 
