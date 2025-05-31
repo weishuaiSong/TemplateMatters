@@ -126,7 +126,7 @@ def calculate_split_indices(total_len, num_parts, part_idx):
 def run_on_gpu(rank, gpu_id, args, full_dataset, start_idx, end_idx):
     os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
     args.torch_device = 0  # 每个进程只有一个可见卡，编号就是 0
-    args.output_path = f"{args.model_name}_{args.dataset_name}_results_rank{rank}.json"
+    args.output_path = os.path.join(args.output_path, f"{args.model_name}_{args.dataset_name}_results_rank{rank}.json")
     run_inference(args, full_dataset, start_idx, end_idx)
 
 if __name__ == "__main__":
@@ -155,7 +155,8 @@ if __name__ == "__main__":
     for p in processes:
         p.join()
 
-    # 合并所有结果
+    os.makedirs(args.output_path, exist_ok=True)
+
     all_results = []
     for i in range(num_gpus):
         partial_path = f"{args.model_name}_{args.dataset_name}_results_rank{i}.json"
@@ -166,8 +167,14 @@ if __name__ == "__main__":
     all_posix_values = [entry["posix"] for entry in all_results]
     average_posix = sum(all_posix_values) / len(all_posix_values)
 
+    # 构造输出文件路径（去掉 rank，统一命名）
+    final_output_file = os.path.join(
+        args.output_path,
+        f"{args.model_name}_{args.dataset_name}_results.json"
+    )
+
     # 保存最终合并结果
-    with open(args.output_path, "w") as f:
+    with open(final_output_file, "w") as f:
         json.dump({
             "average_posix": average_posix,
             "results": all_results
