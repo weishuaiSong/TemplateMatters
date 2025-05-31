@@ -47,7 +47,7 @@ def run_inference(args, full_dataset, start_idx, end_idx):
                 answer=answer,
                 prompt_func=prompt_func,
             )
-            responses.append(result.get("response", ""))
+            responses.append(result.get("free_form_answer", ""))
             logprobs.append(result.get("log_probability", 0.0))
 
         # Step 5: Construct logprob matrix (cross-scoring)
